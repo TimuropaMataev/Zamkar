@@ -1,0 +1,91 @@
+﻿@using Zamkar.Models
+@model IndexViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<style>
+    .glyphicon {
+        display: inline-block;
+        padding: 0 5px;
+    }
+
+    .glyphicon-chevron-right:after {
+        content: "\00BB";
+    }
+
+    .glyphicon-chevron-left:before {
+        content: "\00AB";
+    }
+</style>
+
+<h1>Список пользователей</h1>
+<form method="get">
+    <label>Имя: </label>
+    <input name="name" value="@Model.FilterViewModel.Name" />
+
+    <label>Компания: </label>
+    <select name="company" asp-items="Model.FilterViewModel.Companies"></select>
+
+    <input type="submit" value="Фильтр" />
+</form>
+
+<table>
+    <tr>
+        <th>
+            <a asp-action="Index"
+               asp-route-name="@(Model.FilterViewModel.Name)"
+               asp-route-company="@(Model.FilterViewModel.Company)"
+               asp-route-sort="@(Model.SortViewModel.NameSort)">
+                Имя
+            </a>
+        </th>
+        <th>
+            <a asp-action="Index"
+               asp-route-name="@(Model.FilterViewModel.Name)"
+               asp-route-company="@(Model.FilterViewModel.Company)"
+               asp-route-sort="@(Model.SortViewModel.AgeSort)">
+                Возраст
+            </a>
+        </th>
+        <th>
+            <a asp-action="Index"
+               asp-route-name="@(Model.FilterViewModel.Name)"
+               asp-route-company="@(Model.FilterViewModel.Company)"
+               asp-route-sort="@(Model.SortViewModel.CompanySort)">
+                Компания
+            </a>
+        </th>
+    </tr>
+    @foreach (User user in Model.Users)
+    {
+        <tr>
+            <td>@user.Name</td>
+            <td>@user.Age</td>
+            <td>@user.Company!.Name</td>
+        </tr>
+    }
+</table>
+
+<p>
+    @if (Model.PageViewModel.HasPrevious)
+    {
+        <a asp-action="Index"
+           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+           asp-route-name="@(Model.FilterViewModel.Name)"
+           asp-route-company="@(Model.FilterViewModel.Company)"
+           asp-route-sort="@(Model.SortViewModel.Current)"
+           class="glyphicon-chevron-left">
+            Назад
+        </a>
+    }
+    @if (Model.PageViewModel.HasNext)
+    {
+        <a asp-action="Index"
+           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+           asp-route-name="@(Model.FilterViewModel.Name)"
+           asp-route-company="@(Model.FilterViewModel.Company)"
+           asp-route-sort="@(Model.SortViewModel.Current)"
+           class="glyphicon-chevron-right">
+            Вперед
+        </a>
+    }
+</p>
